@@ -1,0 +1,6 @@
+Lib
+Lib/*
+venv
+.idea
+.DS_Store
+.pytest_cache
