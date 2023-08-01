@@ -1,2 +1,0 @@
-# Tesla
-My diplom project
