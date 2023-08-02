@@ -49,7 +49,7 @@ def run_allure():
     return render_template('report.html', text=out, json=out)
 
 
-@app.route('/welcome')
+@app.route('/')
 def welcome():
     """ Эта функция запуская и отвечает за процесс возврата результата welcome.html. """
 
