@@ -20,7 +20,7 @@ def run_whois():
                           stdin=subprocess.PIPE,
                           universal_newlines=True) as result:
         out = result.communicate()
-    return render_template('runhosting.html', text=out, json=out)
+    return render_template('report.html', text=out, json=out)
 
 
 @app.route("/runapi")
@@ -33,7 +33,7 @@ def run_api():
                           stdin=subprocess.PIPE,
                           universal_newlines=True) as result:
         out = result.communicate()
-    return render_template('runhosting.html', text=out, json=out)
+    return render_template('report.html', text=out, json=out)
 
 
 @app.route("/runallure")
@@ -46,7 +46,7 @@ def run_allure():
                           stdin=subprocess.PIPE,
                           universal_newlines=True) as result:
         out = result.communicate()
-    return render_template('runhosting.html', text=out, json=out)
+    return render_template('report.html', text=out, json=out)
 
 
 @app.route('/welcome')

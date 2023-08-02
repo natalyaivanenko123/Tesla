@@ -1,177 +1,153 @@
-import time
-import requests
-
-from termcolor import colored
-from selenium.webdriver.common.by import By
+import allure
+from selenium.common import TimeoutException
+from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
+# from class_work.diplom.pages.locators import base_page_locators
+
+# 1. allure - библиотека для создания отчетов и документации о тестировании. Она используется для создания красивых отчетов о пройденных тестах, включая скриншоты и описания процесса тестирования.
+# 2. selenium.common.TimeoutException - исключение, которое возникает, когда таймаут истекает в Selenium WebDriver. Оно используется для обработки исключений при работе с WebDriver и ожидании элементов на странице.
+# 3. selenium.webdriver.chrome.webdriver.WebDriver - класс для создания экземпляра веб-драйвера для браузера Google Chrome. Он используется для создания экземпляра WebDriver для автоматизации действий в браузере.
+# 4. selenium.webdriver.support.ui.WebDriverWait - класс для ожидания элементов на странице в Selenium WebDriver. Он используется для задания таймаута и повторения попыток до тех пор, пока элемент не будет найден на странице.
+# 5. selenium.webdriver.support.expected_conditions - модуль с ожидаемыми условиями в Selenium WebDriver. Он используется для проверки наличия определенных элементов на странице, проверки их видимости, доступности и других свойств.
+# 6. selenium.webdriver.common.action_chains.ActionChains - класс для создания цепочки действий в Selenium WebDriver. Он используется для создания последовательности действий, таких как клики, наведение курсора, перетаскивание элементов и других событий.
+# 7. class_work.diplom.pages.locators.base_page_locators - модуль с локаторами элементов на странице. Он используется для создания экземпляров классов страниц и доступа к элементам на странице через их локаторы.
 
 
-class WebPage(object):
-    _web_driver = None
+class BasePage:
+    """ Класс BasePage инициализируется с помощью WebDriver,
+        который передается в конструктор как аргумент driver.
+        Это означает, что каждый экземпляр класса BasePage
+        будет иметь доступ к объекту WebDriver, который
+        будет использоваться для поиска элементов на странице"""
 
-    def __init__(self, web_driver, url=''):
-        self._web_driver = web_driver
-        self.get(url)
+    def __init__(self, driver: WebDriver):
+        self.driver = driver
 
-    def __setattr__(self, name, value):
-        if not name.startswith('_'):
-            self.__getattribute__(name)._set_value(self._web_driver, value)
-        else:
-            super(WebPage, self).__setattr__(name, value)
+    def find_element(self, *args):
+        """ Метод find_element() принимает два аргумента:
+            by_name и by_val, которые определяют, как искать
+            элемент на странице. Метод использует self.driver
+            для поиска элемента на странице и возвращает найденный элемент"""
 
-    def __getattribute__(self, item):
-        attr = object.__getattribute__(self, item)
+        by_name, by_val = args[0]
+        return self.driver.find_element(by_name, by_val)
 
-        if not item.startswith('_') and not callable(attr):
-            attr._web_driver = self._web_driver
-            attr._page = self
+    def is_element_visible(self, *args):
+        """ Метод is_element_visible() также принимает два аргумента:
+            by_name и by_val, которые определяют, как искать элемент на странице.
+            Метод использует WebDriverWait для ожидания видимости
+            элемента на странице в течение 10 секунд, после чего
+            он возвращает найденный элемент. Если элемент не появляется
+            на странице в течение 10 секунд, возникает исключение TimeoutException"""
 
-        return attr
+        by_name, by_val = args[0]
+        WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located((by_name, by_val))
+        )
+        return self.driver.find_element(by_name, by_val)
 
-    def get(self, url):
-        self._web_driver.get(url)
-        self.wait_page_loaded()
+    def is_element_enabled(self, el):
+        return el.is_enabled()
 
-    def scroll_down(self, offset=0):
-        """ Прокрутите страницу вниз. """
+    def is_not_element_present(self, *args):
+        """ Метод is_not_element_present() проверяет, что элемент не появляется
+            на странице в течение 10 секунд. Метод принимает два аргумента:
+            by_name и by_val, которые определяют, как искать элемент на странице.
+            Метод использует WebDriverWait для ожидания отсутствия элемента на
+            странице в течение 10 секунд. Если элемент не появляется на
+            странице в течение 10 секунд, метод возвращает True. Если элемент
+            все же появляется, возникает исключение TimeoutException, и метод возвращает False"""
 
-        if offset:
-            self._web_driver.execute_script('window.scrollTo(0, {0});'.format(offset))
-        else:
-            self._web_driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
+        try:
+            by_name, by_val = args[0]
+            WebDriverWait(self.driver, 10).until_not(
+                EC.presence_of_element_located((by_name, by_val)),
+            )
+        except TimeoutException:
+            return False
+        return True
 
-    def scroll_up(self, offset=0):
-        """ Прокрутить страницу вверх. """
+    def is_element_present(self, *args):
+        """ Метод is_element_present() проверяет, что элемент появляется
+            на странице в течение 10 секунд. Метод принимает два аргумента:
+            by_name и by_val, которые определяют, как искать элемент
+            на странице. Метод использует WebDriverWait для ожидания
+            появления элемента на странице в течение 10 секунд. Если элемент
+            появляется на странице в течение 10 секунд, метод возвращает True.
+            Если элемент не появляется, возникает исключение TimeoutException,
+            и метод возвращает False"""
 
-        if offset:
-            self._web_driver.execute_script('window.scrollTo(0, -{0});'.format(offset))
-        else:
-            self._web_driver.execute_script('window.scrollTo(0, -document.body.scrollHeight);')
+        try:
+            by_name, by_val = args[0]
+            WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((by_name, by_val)),
+            )
+        except TimeoutException:
+            return False
+        return True
 
-    def switch_to_iframe(self, iframe):
-        """ Переключитесь на iframe по его имени. """
-        self._web_driver.switch_to.frame(iframe)
+    def find_elements(self, *args):
+        """ Метод find_elements() находит все элементы на странице,
+            соответствующие заданным параметрам поиска. Метод принимает
+            два аргумента: by_name и by_val, которые определяют,
+            как искать элементы на странице. Метод использует self.driver
+            для поиска элементов на странице и возвращает найденные элементы"""
 
-    def validate_html(self, url):
-        """Функция для проверки валидации HTML страницы"""
-        validator_url = 'https://validator.w3.org/nu/?out=json'
-        headers = {'Content-Type': 'text/html; charset=utf-8'}
-        data = requests.get(url).text
-        response = requests.post(validator_url, headers=headers, data=data.encode('utf-8'))
-        results = response.json()
-        return results
+        by_name, by_val = args[0]
+        return self.driver.find_elements(by_name, by_val)
 
     def get_current_url(self):
-        """ Возвращает URL текущего браузера. """
-        return self._web_driver.current_url
+        """ Метод get_current_url() возвращает текущий URL-адрес страницы"""
 
-    def get_page_source(self):
-        """ Возвращает тело текущей страницы. """
+        return self.driver.current_url
 
-        source = ''
+    def is_elements_text_equal_to(self, *args, element_text):
+        """ Метод is_elements_text_equal_to() проверяет,
+            что текст элемента соответствует заданному значению.
+            Метод принимает два аргумента: by_name и by_val,
+            которые определяют, как искать элемент на странице,
+            и element_text - текст, который должен быть найден в элементе.
+            Метод использует WebDriverWait для ожидания
+            появления элемента на странице в течение 10 секунд.
+            Если текст элемента соответствует заданному значению,
+            метод возвращает True. Если текст элемента не соответствует
+            заданному значению, возникает исключение TimeoutException,
+            и метод возвращает False"""
+
         try:
-            source = self._web_driver.page_source
-        except:
-            print(colored('Can not get page source', 'red'))
+            by_name, by_val = args[0]
+            WebDriverWait(self.driver, 10).until(
+                EC.text_to_be_present_in_element((by_name, by_val), element_text),
+            )
+        except TimeoutException:
+            return False
+        return True
 
-        return source
+    def drag_and_drop_from_right_to_left(self, source, x_offset=0, y_offset=0):
+        """ Метод drag_and_drop_from_right_to_left() выполняет перетаскивание
+            элемента справа налево. Метод принимает два аргумента: source - элемент,
+            который нужно перетащить, и x_offset, y_offset - смещение на которое
+            нужно перетащить элемент. Метод использует метод find_element() для
+            поиска элемента на странице, создает объект ActionChains, который
+            используется для выполнения перетаскивания элемента. x_offset и y_offset
+            используются для указания смещения, на которое нужно перетащить элемент.
+            Если не указано смещение, элемент будет перетаскиваться на ту же позицию,
+            где он находится на странице"""
 
-    def check_js_errors(self, ignore_list=None):
-        """ Эта функция проверяет ошибки JS на странице. """
+        source_web_element = self.find_element(source)
+        action = ActionChains(self.driver)
+        action.drag_and_drop_by_offset(source_web_element, x_offset, y_offset).perform()
 
-        ignore_list = ignore_list or []
+    def check_for_url_is_changed(self, current_url, url_that_should_be):
+        """ Метод check_for_url_is_changed() проверяет,
+            что URL-адрес страницы изменился. Метод принимает два аргумента: current_url
+            - текущий URL-адрес страницы и url_that_should_be - URL-адрес,
+            который должен быть после выполнения действия. Метод сравнивает
+            текущий URL-адрес страницы с ожидаемым URL-адресом. Если текущий
+            URL-адрес отличается от ожидаемого, возникает исключение AssertionError.
+            Если URL-адрес соответствует ожидаемому, метод ничего не возвращает"""
 
-        logs = self._web_driver.get_log('browser')
-        for log_message in logs:
-            if log_message['level'] != 'WARNING':
-                ignore = False
-                for issue in ignore_list:
-                    if issue in log_message['message']:
-                        ignore = True
-                        break
-
-                assert ignore, 'JS error "{0}" on the page!'.format(log_message)
-
-    def wait_page_loaded(self, timeout=60, check_js_complete=True,
-                         check_page_changes=False, check_images=False,
-                         wait_for_element=None,
-                         wait_for_xpath_to_disappear='',
-                         sleep_time=2):
-        """ Эта функция ждет, пока страница не будет полностью загружена.
-            Мы используем много разных способов определить, загружена страница или нет.:
-            1) Проверить статус JS
-            2) Проверить модификацию в исходном коде страницы
-            3) Убедитесь, что все изображения загружены полностью
-               (Примечание: по умолчанию эта проверка отключена)
-            4) Убедиться, что ожидаемые элементы, представленные на странице
-        """
-
-        page_loaded = False
-        double_check = False
-        k = 0
-
-        if sleep_time:
-            time.sleep(sleep_time)
-
-        # Получить исходный код страницы для отслеживания изменений в HTML:
-        source = ''
-        try:
-            source = self._web_driver.page_source
-        except:
-            pass
-
-        # Подождать, пока страница загрузится (и прокрутить ее, чтобы убедиться, что все объекты будут загружены):
-        while not page_loaded:
-            time.sleep(0.5)
-            k += 1
-
-            if check_js_complete:
-                # Прокрутить вниз и подождите, пока страница загрузится:
-                try:
-                    self._web_driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
-                    page_loaded = self._web_driver.execute_script("return document.readyState == 'complete';")
-                except Exception as e:
-                    pass
-
-            if page_loaded and check_page_changes:
-                # Проверьть не изменился ли источник страницы
-                new_source = ''
-                try:
-                    new_source = self._web_driver.page_source
-                except:
-                    pass
-
-                page_loaded = new_source == source
-                source = new_source
-
-            # Подождить когда какой-то элемент исчезнет:
-            if page_loaded and wait_for_xpath_to_disappear:
-                bad_element = None
-
-                try:
-                    bad_element = WebDriverWait(self._web_driver, 0.1).until(
-                        EC.presence_of_element_located((By.XPATH, wait_for_xpath_to_disappear))
-                    )
-                except:
-                    pass  # Игнорировать ошибки тайм-аута
-
-                page_loaded = not bad_element
-
-            if page_loaded and wait_for_element:
-                try:
-                    page_loaded = WebDriverWait(self._web_driver, 0.1).until(
-                        EC.element_to_be_clickable(wait_for_element._locator)
-                    )
-                except:
-                    pass  # Игнорировать ошибки тайм-аута
-
-            assert k < timeout, 'The page loaded more than {0} seconds!'.format(timeout)
-
-            # Проверить два раза, что страница полностью загружена:
-            if page_loaded and not double_check:
-                page_loaded = False
-                double_check = True
-
-        # Поднимать вверх (скролл):
-        self._web_driver.execute_script('window.scrollTo(document.body.scrollHeight, 0);')
+        with allure.step(f"Проверяем, что текущий url равен {url_that_should_be}"):
+            assert current_url == url_that_should_be

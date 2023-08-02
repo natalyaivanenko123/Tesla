@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+@import url(https://fonts.googleapis.com/css?family=Bree+Serif);
+
+body {
+	background: #4f4c4d;
+	font-size:22px;
+	line-height: 32px;
+	color: #ffffff;
+	word-wrap:break-word !important;
+	font-family: 'Open Sans', sans-serif;
+	}
+
+h1 {
+	font-size: 60px;
+	text-align: center;
+	color: #FFF;
+}
+
+h3 {
+	font-size: 30px;
+	text-align: center;
+	color: #FFF;
+}
+
+h3 a {
+	color: #FFF;
+}
+
+a {
+	color: #FFF;
+}
+
+h1 {
+	margin-top: 100px;
+	text-align:center;
+	font-size:60px;
+	font-family: 'Bree Serif', 'serif';
+	}
+
+#container {
+	margin: 0 auto;
+}
+
+p {
+	text-align: center;
+}
+
+nav {
+	margin: 0px 0;
+	background-color: #01043e;
+}
+
+nav ul {
+	padding: 0;
+    margin: 0;
+	list-style: none;
+	position: relative;
+	}
+
+nav ul li {
+	display:inline-block;
+	background-color: #01043e;
+	}
+
+nav a {
+	display:block;
+	padding:0 10px;
+	color:#FFF;
+	font-size:14px;
+	line-height: 60px;
+	text-decoration:none;
+}
+
+nav a:hover {
+	background-color: #ec1844;
+}
+
+/* Hide Dropdowns by Default */
+nav ul ul {
+	display: none;
+	position: absolute;
+	top: 60px; /* the height of the main nav */
+}
+
+/* Display Dropdowns on Hover */
+nav ul li:hover > ul {
+	display:inherit;
+}
+
+/* Fisrt Tier Dropdown */
+nav ul ul li {
+	width:190px;
+	float:none;
+	display:list-item;
+	position: relative;
+}
+
+/* Second, Third and more Tiers	*/
+nav ul ul ul li {
+	position: relative;
+	top:-60px;
+	left:190px;
+}
+
+
+/* Change this in order to change the Dropdown symbol */
+li > a:after { content:  ' >'; }
+li > a:only-child:after { content: ''; }
+</style>
+</head>
+<body>
+<div class="logo">
+  <img src="https://hoster.by/local/components/hoster/headerMenu/templates/.default/images/hoster-logo-main.svg" alt="hoster.by logo">
+</div>
+<div id="container">
+    <nav>
+        <ul>
+            <li><a href="#">Хостинг и домены</a>
+            <!-- First Tier Drop Down -->
+            <ul>
+                <li><a href="#">Домены</a>
+                    <ul>
+                        <li><a href="#">Регистрация домена</a></li>
+                        <li><a href="#">Перенести домен</a></li>
+                        <li><a href="#">DNS-хостинг новое</a></li>
+                        <li><a href="#">Whois-сервис</a></li>
+                        <li><a href="#">Сайт-визитка новое</a></li>
+                    </ul>
+                </li>
+                <li><a href="/runhosting">Хостинг</a>
+                    <ul>
+                        <li><a href="#">Хостинг сайтов</a></li>
+                        <li><a href="#">Битрикс-хостинг</a></li>
+                        <li><a href="#">Wordpress-хостинг</a></li>
+                        <li><a href="#">Быстрый старт</a></li>
+                        <li><a href="#">Перенос сайта</a></li>
+                        <li><a href="#">Windows-хостинг</a></li>
+                        <li><a href="#">Drupal-хостинг</a></li>
+                        <li><a href="#">Joomla-хостинг</a></li>
+                        <li><a href="#">Tilda-хостинг</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">SSL-сертификаты</a>
+                    <ul>
+                        <li><a href="#">Сертификаты GlobalSign</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Хостинг для госорганизаций</a>
+                    <ul>
+                        <li><a href="#">Защищенный Unix-хостинг</a></li>
+                        <li><a href="#">Защищенный Bitrix-хостинг</a></li>
+                        <li><a href="#">Защищенный выделенный сервер</a></li>
+                        <li><a href="#">Защищенное облако sCloud</a></li>
+                        <li><a href="#">Защищенная почта</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Дополнительно к хостингу</a>
+                    <ul>
+                        <li><a href="#">Регистрация в БелГИЭ</a></li>
+                        <li><a href="#">Конструктор сайтов</a></li>
+                        <li><a href="#">Мониторинг сайтов новое</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Корпоративная почта</a>
+                    <ul>
+                        <li><a href="#">Профессиональная почта</a></li>
+                        <li><a href="#">Перенос почты</a></li>
+                    </ul>
+                </li>
+            </ul>
+            </li>
+            <li><a href="#">Облако и серверы</a>
+            <!-- First Tier Drop Down -->
+            <ul>
+                <li><a href="#">Облачные решения</a>
+                    <ul>
+                        <li><a href="#">Облачный хостинг популярное</a></li>
+                        <li><a href="#">Готовые конфигурации VPS/VDS</a></li>
+                        <li><a href="#">Частное облако новое</a></li>
+                        <li><a href="#">Защищенное облако sCloud</a></li>
+                        <li><a href="#">Облачный сервер CMS Bitrix</a></li>
+                        <li><a href="#">Облачный сервер Битрикс24</a></li>
+                        <li><a href="#">Облачный сервер 1C:Бухгалтерия</a></li>
+                        <li><a href="#">Облачное хранилище NextCloud</a></li>
+                        <li><a href="#">Виртуальный офис OnlyOffice</a></li>
+                        <li><a href="#">Корпоративная почта в облаке</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Выделенный сервер</a>
+                    <ul>
+                        <li><a href="#">Конфигурации выделенных серверов</a></li>
+                        <li><a href="#">Выделенный сервер в защищенном контуре</a></li>
+                        <li><a href="#">Частное облако новое</a></li>
+                    </ul>
+                </li>
+            </ul>
+            </li>
+            <li><a href="#">Услуги и лицензии</a>
+            <!-- First Tier Drop Down -->
+            <ul>
+                <li><a href="#">Администрирование</a>
+                    <ul>
+                        <li><a href="#">Администрирование сервера</a></li>
+                        <li><a href="#">Разовые работы</a></li>
+                        <li><a href="#">Перенос и размещение сайта</a></li>
+                        <li><a href="#">Отказоустойчивый кластер</a></li>
+                        <li><a href="#">Частное облако новое</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Защита данных</a>
+                    <ul>
+                        <li><a href="#">Хостинг для персональных данных</a></li>
+                        <li><a href="#">Аудит информационной безопасности новое</a></li>
+                        <li><a href="#">Тех­ни­чес­кий ана­лиз за­щищен­ности</a></li>
+                        <li><a href="#">Раз­ра­бот­ка до­кумен­та­ции новое</a></li>
+                        <li><a href="#">Инфраструктура по стандарту PCI DSS</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Лицензии на ПО</a>
+                    <ul>
+                        <li><a href="#">Лицензии СМS «1С-Битрикс: Управление сайтом»</a></li>
+                        <li><a href="#">Лицензии Битрикс24</a></li>
+                        <li><a href="#">ISPManager</a></li>
+                        <li><a href="#">cPanel</a></li>
+                        <li><a href="#">CloudLinux</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Онлайн-сервисы</a>
+                    <ul>
+                        <li><a href="#">Мониторинг сайтов новое</a></li>
+                        <li><a href="#">USB-ключ в облаке новое</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Медиасервисы</a>
+                    <ul>
+                        <li><a href="#">Стриминг, вебинары, переговоры</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Услуги партнеров</a>
+                    <ul>
+                        <li><a href="#">Разработка и продвижение сайтов</a></li>
+                        <li><a href="#">Стать партнером</a></li>
+                    </ul>
+                </li>
+                </li>
+            </ul>
+            </li>
+            <li><a href="#">API</a>
+            <!-- First Tier Drop Down -->
+            <ul>
+                <li><a href="#">Нагрузка</a></li>
+                <li><a href="#">Профиль ЛК</a></li>
+                <li><a href="#">Регистрация</a></li>
+                <li><a href="#">Корзина</a></li>
+                <li><a href="#">Статус код</a></li>
+            </ul>
+            <li><a href="#">Другое</a>
+            <!-- First Tier Drop Down -->
+            <ul>
+                <li><a href="#">Футер</a></li>
+                <li><a href="#">Хедер</a></li>
+                <li><a href="#">Главная страница</a></li>
+                <li><a href="#">Авторизация</a></li>
+                <li><a href="#">Регистрация</a></li>
+                <li><a href="#">Авторизация ЛК</a></li>
+                <li><a href="#">Регистрация ЛК</a></li>
+                <li><a href="#">Виджет чата</a></li>
+            </ul>
+            <li><a href="#">Формирование отчета Allure</a></li>
+        </ul>
+    </nav>
+  <h1>ИНСТРУКЦИИ</h1>
+<p>1+1=2</p>
+</div>
+</body>
+</html>
